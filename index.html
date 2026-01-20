@@ -9,7 +9,7 @@
             crossorigin=""
     />
     <link rel="manifest" href="manifest.json" />
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,16 +26,34 @@
     <link rel="apple-touch-icon" href="images/icons/icon-512-512.png" />
     <meta name="apple-mobile-web-app-status-bar" content="#f15927" />
     <meta name="theme-color" content="#cdeaf1" />
+
+    <!-- Templates -->
+    <template id="update-start-template">
+        <div><span data-i18n-key="update-updating">Updating</span>: ${text}</div>
+        <div data-i18n-key="update-takes-time">This may take some time</div>
+        <div class="small" data-i18n-key="update-window-close">This window can be closed</div>
+    </template>
+    <template id="update-finish-template">
+        <div data-i18n-key="update-ready">Update ready</div>
+        <div>${text}</div>
+    </template>
+
+    <!-- 👇 NEU: Menu-Template -->
+    <template id="menu-template">
+        <nav class="menu">
+            <a href="#labs" data-i18n-key="menu-labs">Labs</a>
+            <a href="#map" data-i18n-key="menu-map">Map</a>
+            <a href="#settings" data-i18n-key="menu-settings">Settings</a>
+            <a href="#about" data-i18n-key="menu-about">About</a>
+            <a href="#help" data-i18n-key="menu-help">Help</a>
+            <a href="#stats" data-i18n-key="menu-stats">Stats</a>
+            <a href="#friends" data-i18n-key="menu-friends">Friends</a>
+            <a href="#donate" data-i18n-key="menu-donate">Donate</a>
+            <a href="#messages" data-i18n-key="menu-messages">Messages</a>
+            <a href="#licence" data-i18n-key="menu-licence">Licence</a>
+        </nav>
+    </template>
 </head>
-<template id="update-start-template">
-    <div><span data-i18n-key="update-updating">Updating</span>: ${text}</div>
-    <div data-i18n-key="update-takes-time">This may take some time</div>
-    <div class="small" data-i18n-key="update-window-close">This window can be closed</div>
-</template>
-<template id="update-finish-template">
-    <div data-i18n-key="update-ready">Update ready</div>
-    <div>${text}</div>
-</template>
 <body>
 <input id="symbol-menu" class="hidden" type="checkbox" />
 <input id="symbol-labs" class="hidden" type="radio" name="top" />
@@ -61,6 +79,7 @@
 <input id="bit-swan" class="hidden" data-setting-default="" type="checkbox" />
 <input id="bit-turkey" class="hidden" data-setting-default="true" type="checkbox" />
 <input id="translate" class="hidden" data-setting-default="" type="checkbox" />
+
 <header>
     <div id="menu" class="popup">Menu (loading)</div>
     <div id="popup" class="popup"><div id="popup-content" class="content">Popup (loading)</div></div>
@@ -74,12 +93,14 @@
     <a id="hash" class="hidden"></a>
     <input id="friend-bits" class="debug" data-setting-default="196672" type="number" style="height: 0.9rem; width:4rem;"/>
 </header>
+
 <main>
     <div id="labs">Labs (Loading)</div>
     <div id="map">Map (Loading)</div>
     <div id="settings" data-changes="[]">Settings (Loading)</div>
     <div id="page">Page (loading)</div>
 </main>
+
 <footer>
     <div id="location" class="left">Getting Location</div>
     <div id="timestamp">??:??:??</div>
@@ -88,6 +109,7 @@
         <label for="translate" class="hidden">🐠</label>
     </div>
 </footer>
+
 <script type="module" src="app.js"></script>
 </body>
 </html>
