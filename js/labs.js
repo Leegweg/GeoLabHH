@@ -1,10 +1,10 @@
 /*  labs.js  –  Open-Door 514-Zeilen-Version  */
-import config from './config.js';
-import du from './domutils.js';
-import i18n from './i18n.js';
-import Location from './location.js';
-import Map from './map.js';
-import st from './settings.js';
+import config from './js/config.js';
+import du from './js/domutils.js';
+import i18n from './js/i18n.js';
+import Location from './js/location.js';
+import Map from './js/map.js';
+import st from './js/settings.js';
 
 export default class Labs {
     static labs = null;
@@ -346,7 +346,6 @@ export default class Labs {
             ;
         })
     });
-
 
     static getDetail = (id) => new Promise((resolve, reject) => {
         const labs = null !== this.labs ? this.labs.filter(lab => id === lab.id) : [];
