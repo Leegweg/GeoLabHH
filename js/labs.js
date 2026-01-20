@@ -1,3 +1,4 @@
+/*  labs.js  –  Open-Door 514-Zeilen-Version  */
 import config from './config.js';
 import du from './domutils.js';
 import i18n from './i18n.js';
@@ -7,7 +8,7 @@ import st from './settings.js';
 
 export default class Labs {
     static labs = null;
-    static data_theme = {}
+    static data_theme = {};
 
     static blockSize = () => new Promise(resolve =>
         Promise.all([
@@ -22,20 +23,14 @@ export default class Labs {
         window
             .location
             .search
-            .substring(1) // Remove the '?'
+            .substring(1)
             .split('&')
             .reduce((acc, part) => {
                 const p = part.split('=');
                 if (p[0]) {
-                    if ('r' === p[0]) {
-                        p[0] = 'referrer';
-                    }
-                    // Only override block_size if its already given
+                    if ('r' === p[0]) p[0] = 'referrer';
                     if ('block_size' === p[0]) {
-                        if (
-                            acc.hasOwnProperty('block_size') &&
-                            !acc.hasOwnProperty('special')
-                        ) {
+                        if (acc.hasOwnProperty('block_size') && !acc.hasOwnProperty('special')) {
                             acc.block_size = +p[1];
                         }
                     } else if (
@@ -48,8 +43,7 @@ export default class Labs {
                     }
                 }
                 return acc;
-            }, data)
-        ;
+            }, data);
         return data;
     };
 
@@ -67,9 +61,7 @@ export default class Labs {
             friend_bits,
             language
         ]) => {
-            if (null === data) {
-                data = {};
-            }
+            if (null === data) data = {};
             this.appendFromQueryString(data);
             document
                 .querySelector('[data-loading-counter]')
@@ -106,8 +98,7 @@ export default class Labs {
                         .dataset
                         .loadingCounter--;
                     return resolve(data)
-                })
-            ;
+                });
         });
     });
 
@@ -122,15 +113,13 @@ export default class Labs {
                 </div>
         ` : ''
         ).join('');
-        // <div class="theme other" ></div><div class="theme architecture" ></div>
-        // No return, this us used as a procedure
     }
 
     static checkLabs = (labs, source) => {
-		if (! labs instanceof Array) { 
-			console.warning('checkLabs', labs, source);
-			return; 
-		}
+        if (! labs instanceof Array) {
+            console.warning('checkLabs', labs, source);
+            return;
+        }
         document.dispatchEvent(
             new MessageEvent(
                 'message',
@@ -201,15 +190,12 @@ export default class Labs {
             .all([
                 this
                     .getLabs()
-                    //.then(() => Labs.showLabs()),
             ].concat(Map.position ? [
                 Map
                     .handleEndDrag()
-                    //.then(() => Labs.showLabs())
             ] : [])
         )
             .then(() => Labs.showLabs())
-            //.then(res => resolve(res))
             .catch(err => reject(err))
     });
 
@@ -399,6 +385,8 @@ export default class Labs {
         du.setInnerHtmlByQuery('.country', lab.country, elem);
         du.setInnerHtmlByQuery('.flag', lab.flag, elem);
         du.setInnerHtmlByQuery('.journal', lab.journal, elem);
+        /* Journal immer sichtbar – auch nach erneutem Öffnen */
+        elem.querySelector('.journal').classList.remove('hidden');
         du.setInnerHtmlByQuery('.median-time-to-complete', lab.median_time_to_complete, elem);
         du.setInnerHtmlByQuery('.owner', lab.owner, elem);
         du.setInnerHtmlByQuery('.published-utc', lab.published_utc, elem);
@@ -429,14 +417,12 @@ export default class Labs {
                 option.value = x
                     .replace(/\s/g, '')
                     .toLowerCase()
-                    .replace('–', '-') // U+2013
-                    .replace('—', '-') // U+2014
-                    .replace('‘', "'") // U+2018
-                    .replace('’', "'") // U+2019
-                    //.replace('‛', "'") // U+201B Nope, not the 9 quotation mark
-                    .replace('“', '"') // U+201C
-                    .replace('”', '"') // U+201D
-                    //.replace('„', '"') // U+201E The Yanks probably don't recognise these as double quotes
+                    .replace('–', '-')
+                    .replace('—', '-')
+                    .replace('‘', "'")
+                    .replace('’', "'")
+                    .replace('“', '"')
+                    .replace('”', '"')
                 ;
                 option.selected = option.value === lab.completion_code;
                 select.appendChild(option);
@@ -448,6 +434,17 @@ export default class Labs {
         input && (input.value = lab.completion_code);
 
         elem.getElementsByClassName('details')[1].classList.remove('blur');
+
+        /* Antwort-Feld sofort wieder aktivieren – auch im Labs-Menu */
+        const input2  = elem.querySelector('.answer input');
+        const select2 = elem.querySelector('.answer select');
+        if (input2)  input2.disabled  = false;
+        if (select2) select2.disabled = false;
+
+        /* Map sofort neu zeichnen – Kreis wird grün */
+        Map.updateLabs();
+
+        return elem;
     }
 
     static openLab = (id) => {
@@ -485,4 +482,3 @@ export default class Labs {
             .catch(err => reject(err))
     })
 }
-
